@@ -13,6 +13,9 @@ export default function authenticate (strategies, options = {}) {
 
     // If called internally or we are already authenticated skip
     if (!hook.params.provider || hook.params.authenticated) {
+      if (hook.params.query.accessToken) {
+          delete hook.params.query.accessToken;
+      }
       return Promise.resolve(hook);
     }
 
@@ -41,8 +44,10 @@ export default function authenticate (strategies, options = {}) {
       return Promise.reject(new errors.BadRequest(`Authentication strategy '${strategy}' is not registered.`));
     }
 
-    if (hook.params.provider == "socketio" && !hook.data.strategy) {
-        hook.data = hook.params.query;
+
+    if (hook.params.provider == "socketio" && !hook.data.strategy && hook.params.query.accessToken) {
+          hook.data.accessToken = hook.params.query.accessToken;
+          delete hook.params.query.accessToken;
     }
 
     // NOTE (EK): Passport expects an express/connect
