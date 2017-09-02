@@ -5,8 +5,10 @@ export default function () {
   debug('Registering exposeCookies middleware');
 
   return function exposeCookies (req, res, next) {
-    debug('Exposing Express cookies to hooks and services', req.cookies);
-    req.feathers.cookies = req.cookies;
+    if (req.feathers) {
+        debug('Exposing Express cookies to hooks and services', req.cookies);
+        req.feathers.cookies = req.cookies;
+    }
     next();
   };
 }
