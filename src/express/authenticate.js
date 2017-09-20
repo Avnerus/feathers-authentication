@@ -26,7 +26,9 @@ export default function authenticate (strategy, options = {}) {
       // TODO (EK): Support passport successFlash
       if (result.success) {
         Object.assign(req, { authenticated: true }, result.data);
-        Object.assign(req.feathers, { authenticated: true }, result.data);
+        if (req.feathers) {
+            Object.assign(req.feathers, { authenticated: true }, result.data);
+        }
 
         if (options.successRedirect && !options.__oauth) {
           debug(`Redirecting to ${options.successRedirect}`);
