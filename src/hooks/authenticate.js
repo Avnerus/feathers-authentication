@@ -13,7 +13,7 @@ export default function authenticate (strategies, options = {}) {
 
     // If called internally or we are already authenticated skip
     if (!hook.params.provider || hook.params.authenticated) {
-      if (hook.params.query.accessToken) {
+      if (hook.params.query && hook.params.query.accessToken) {
           delete hook.params.query.accessToken;
       }
       return Promise.resolve(hook);
